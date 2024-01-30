@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:routes_navigation/pages/homePage.dart';
+import 'package:routes_navigation/widgets/my_buttons.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -54,30 +55,35 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 25,),
 
-              InkWell(
-                onTap: () async{
-                  setState(() {
-                    changedButton = true;
-                  });
-                  await Future.delayed(Duration(seconds: 1));
-                  Navigator.pushNamed(context, "/homepage");
-                },
-                child: AnimatedContainer(
-                  height: 45,
-                  width: changedButton ? 80: 120,
-                  // color: Colors.purple,
-                  child: Center(child:
-                  changedButton? Icon(Icons.done, color: Colors.white,) : Text("Click!", textAlign: TextAlign.center,style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25
-                  ),
-                  )),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple,
-                    borderRadius: BorderRadius.circular(changedButton? 50 :10),
-                  ), duration: Duration(seconds: 1),
-                ),
-              )
+              // Created Button on custom Widget
+              // InkWell(
+              //   onTap: () async{
+              //     setState(() {
+              //       changedButton = true;
+              //     });
+              //     await Future.delayed(Duration(seconds: 1));
+              //     Navigator.pushNamed(context, "/homepage");
+              //   },
+              //   child: AnimatedContainer(
+              //     height: 45,
+              //     width: changedButton ? 80: 120,
+              //     // color: Colors.purple,
+              //     child: Center(child:
+              //     changedButton? Icon(Icons.done, color: Colors.white,) : Text("Click!", textAlign: TextAlign.center,style: TextStyle(
+              //       color: Colors.white,
+              //       fontSize: 25
+              //     ),
+              //     )),
+              //     decoration: BoxDecoration(
+              //       color: Colors.deepPurple,
+              //       borderRadius: BorderRadius.circular(changedButton? 50 :10),
+              //     ), duration: Duration(seconds: 1),
+              //   ),
+              // ),
+              MyButton(buttonText: "Login", routeName: "/homepage",flag: false, onPressed: () {
+                // Add your custom logic here
+                print("Button Clicked!");
+              },)
 
           ],
 
