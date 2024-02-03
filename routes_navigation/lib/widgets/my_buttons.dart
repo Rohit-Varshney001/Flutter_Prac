@@ -27,7 +27,7 @@ class _MyButtonState extends State<MyButton> {
     return InkWell(
       onTap: () async {
         if (!widget.flag) {
-          // If flag is false, do not navigate
+          // If flag is false, do not navigate    make authentication on this flag
           print("Flag is false, button not clicked!");
           return;
         }
