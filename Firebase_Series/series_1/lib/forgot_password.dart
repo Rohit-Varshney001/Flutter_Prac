@@ -13,7 +13,6 @@ class ForgotPassword extends StatefulWidget {
 
 class _ForgotPasswordState extends State<ForgotPassword> {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
 
   forgotPassword(String email) async{
     if(email == ""){
@@ -52,6 +51,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ClipOval(
+            child: Image(
+              height: 200,
+              width: 200,
+              image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+            ),
+          ),
+          SizedBox(height: 30,),
           UiHelper.customTextField(emailController, "Email", Icons.email, false),
           SizedBox(height: 20,),
           UiHelper.customButton(() {

@@ -5,7 +5,11 @@ class UiHelper{
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       child: TextField(
-        keyboardType: text == "Email"?TextInputType.emailAddress:TextInputType.text,
+        keyboardType: text == "Email"
+            ? TextInputType.emailAddress
+            : text == "OTP"
+            ? TextInputType.number
+            : TextInputType.text,
         controller: controller,
         obscureText: tohide,
         decoration: InputDecoration(

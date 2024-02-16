@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:series_1/forgot_password.dart';
 import 'package:series_1/homepage.dart';
+import 'package:series_1/phone_auth.dart';
 import 'package:series_1/signup_page.dart';
 import 'package:series_1/uiHelper/ui_helper.dart';
 
@@ -58,6 +59,16 @@ class _LoginPageState extends State<LoginPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          ClipOval(
+            child: Image(
+              height: 200,
+              width: 200,
+              image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+            ),
+          ),
+          SizedBox(height: 15,),
+
+
           UiHelper.customTextField(emailController, "Email", Icons.mail, false),
           UiHelper.customTextField(passwordController, "Password", Icons.password, true),
           SizedBox(height: 30,),
@@ -79,7 +90,12 @@ class _LoginPageState extends State<LoginPage> {
           ),
           TextButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPassword()),);
-          }, child: Text("Forgot Password ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500)))
+          }, child: Text("Forgot Password ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+
+          TextButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneAuthPage()),);
+          }, child: Text("Login with OTP ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+
 
         ],
 

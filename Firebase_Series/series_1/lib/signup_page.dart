@@ -96,6 +96,14 @@ class _SignUp_pageState extends State<SignUp_page> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              ClipOval(
+                child: Image(
+                  height: 200,
+                  width: 200,
+                  image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                ),
+              ),
+              SizedBox(height: 10,),
               UiHelper.customTextField(emailController, "Email", Icons.mail, false),
 
               Focus(
