@@ -56,49 +56,51 @@ class _LoginPageState extends State<LoginPage> {
 
 
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ClipOval(
-            child: Image(
-              height: 200,
-              width: 200,
-              image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipOval(
+              child: Image(
+                height: 200,
+                width: 200,
+                image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+              ),
             ),
-          ),
-          SizedBox(height: 15,),
-
-
-          UiHelper.customTextField(emailController, "Email", Icons.mail, false),
-          UiHelper.customTextField(passwordController, "Password", Icons.password, true),
-          SizedBox(height: 30,),
-          UiHelper.customButton(() {
-            login(emailController.text.toString(), passwordController.text.toString());
-          }, "Login"),
-          SizedBox(height: 15,),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Don't have an Account,",style: TextStyle(fontSize: 18),),
-              TextButton(onPressed: (){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUp_page()),);
-              }, child: Text("SignUp",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
-
-
-            ],
-          ),
-          TextButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPassword()),);
-          }, child: Text("Forgot Password ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
-
-          TextButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneAuthPage()),);
-          }, child: Text("Login with OTP ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
-
-
-        ],
-
+            SizedBox(height: 15,),
+        
+        
+            UiHelper.customTextField(emailController, "Email", Icons.mail, false),
+            UiHelper.customTextField(passwordController, "Password", Icons.password, true),
+            SizedBox(height: 30,),
+            UiHelper.customButton(() {
+              login(emailController.text.toString(), passwordController.text.toString());
+            }, "Login"),
+            SizedBox(height: 15,),
+        
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Don't have an Account,",style: TextStyle(fontSize: 18),),
+                TextButton(onPressed: (){
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUp_page()),);
+                }, child: Text("SignUp",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+        
+        
+              ],
+            ),
+            TextButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPassword()),);
+            }, child: Text("Forgot Password ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+        
+            TextButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PhoneAuthPage()),);
+            }, child: Text("Login with OTP ?",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500))),
+        
+        
+          ],
+        
+        ),
       ),
     );
   }

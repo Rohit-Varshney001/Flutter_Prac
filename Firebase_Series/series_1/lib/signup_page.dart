@@ -1,5 +1,11 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:motion_toast/motion_toast.dart';
 import 'package:series_1/homepage.dart';
 import 'package:series_1/login_page.dart';
@@ -24,7 +30,62 @@ class _SignUp_pageState extends State<SignUp_page> {
   bool isPasswordFieldFocused = false;
   bool passwordsMatch = true; // Flag to track if passwords match
   final GlobalKey<FlutterPwValidatorState> validatorKey = GlobalKey<FlutterPwValidatorState>();
+  File? pickedImage;
 
+  showAlertBox(){
+    return showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("Pick iamge from : "),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              onTap: (){
+                pickImage(ImageSource.camera);
+                Navigator.pop(context);
+              },
+              leading: Icon(Icons.camera_alt),
+              title: Text("Camera"),
+            ),
+            ListTile(
+              onTap: (){
+                pickImage(ImageSource.gallery);
+                Navigator.pop(context);
+              },
+              leading: Icon(Icons.upload),
+              title: Text("Gallery"),
+            )
+          ],
+        ),
+      );
+    });
+  }
+
+  pickImage(ImageSource imageSource)async{
+    try{
+      final photo = await ImagePicker().pickImage(source: imageSource);
+      if(photo == null)return;
+      final tempImage = File(photo.path);
+      setState(() {
+        pickedImage = tempImage;
+      });
+    }catch(ex){
+      log(ex.toString());
+    }
+  }
+
+
+  uploadData()async{
+    UploadTask uploadTask = FirebaseStorage.instance.ref("Profile Pics").child(emailController.text.toString()).putFile(pickedImage!);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    String URL = await taskSnapshot.ref.getDownloadURL();
+    FirebaseFirestore.instance.collection("usersImage").doc(emailController.text.toString()).set({
+      "Email" : emailController.text.toString(),
+      "Image" : URL
+    }).then((value){
+      log("User Uploaded");
+    });
+  }
 
 
   signUp(String email, String password, String rePassword) async{
@@ -52,6 +113,7 @@ class _SignUp_pageState extends State<SignUp_page> {
           UserCredential? userCredential;
           try{
             userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value){
+              uploadData();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
             });
           }
@@ -96,11 +158,21 @@ class _SignUp_pageState extends State<SignUp_page> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ClipOval(
-                child: Image(
-                  height: 200,
-                  width: 200,
-                  image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+              InkWell(
+                onTap: showAlertBox,
+                child: pickedImage != null ? ClipOval(
+                  child: Image(
+                    height: 200,
+                    width: 200,
+                    image: FileImage(pickedImage!),
+                  ),
+                ):
+                ClipOval(
+                  child: Image(
+                    height: 200,
+                    width: 200,
+                    image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"),
+                  ),
                 ),
               ),
               SizedBox(height: 10,),

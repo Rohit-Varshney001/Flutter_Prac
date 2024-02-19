@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:series_1/login_page.dart';
+import 'package:series_1/show_data.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,12 +26,7 @@ class _HomePageState extends State<HomePage> {
         title: Text("Home Page"),
         centerTitle: true,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Home Page"),
-        ],
-      ),
+      body: ShowData(),
       floatingActionButton:  Container(
         height: 60,
         width: 60,
