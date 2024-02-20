@@ -1,3 +1,4 @@
+import 'package:firebase_crud/pages/home.dart';
 import 'package:firebase_crud/service/database.dart';
 import 'package:flutter/material.dart';
 import 'package:random_string/random_string.dart';
@@ -93,16 +94,8 @@ class _EmployeeState extends State<Employee> {
                 "Address" : addressController.text,
               };
               await DatabaseMethods.addEmployeeDetails(employeeInfoMap,Id).then((value) => {
-                print("OK")
-                // Fluttertoast.showToast(
-                //   msg: "Employee details has been added successfully",
-                //   toastLength: Toast.LENGTH_SHORT,
-                //   gravity: ToastGravity.CENTER,
-                //   timeInSecForIosWeb: 1,
-                //   backgroundColor: Colors.red,
-                //   textColor: Colors.white,
-                //   fontSize: 16.0
-                // )
+                print("OK"),
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()) )
 
               });
             }, child: Text("Add", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),)))
@@ -112,4 +105,7 @@ class _EmployeeState extends State<Employee> {
       ),
     );
   }
+
+
+
 }
