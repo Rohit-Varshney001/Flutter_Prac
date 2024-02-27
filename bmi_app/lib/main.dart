@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:bmi_app/result_page.dart';
 import 'package:flutter/material.dart';
 
 import 'drop_down.dart';
@@ -43,6 +44,10 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
+void calculate(){
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
   String imagePath = "assets/images/men.png";
@@ -50,6 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
   String selected_height_val = "";
   final List<String> heightOptions = ['Cm.', 'Ft.'];
   final List<String> weightOptions = ['Lbs.', 'Kg.'];
+  TextEditingController ageController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightControllerCM = TextEditingController();
+  TextEditingController heightControllerIN = TextEditingController();
+
 
 
   Widget _buildIconButton(IconData iconData, int index) {
@@ -171,6 +181,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       // height: , // Set the desired height
                       width:  120, // Set the desired width
                       child: TextField(
+                        controller: ageController,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -206,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Container(
                           width: selected_weight_val == "Ft." ? 60 :120, // Set the desired width
                           child: TextField(
+                            controller: heightControllerCM,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -220,6 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             // margin: EdgeInsets.only(left: 10),
                             width: 60,
                             child: TextField(
+                              controller: heightControllerIN,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
@@ -258,6 +271,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Container(
                           width: 120, // Set the desired width
                           child: TextField(
+                            controller: weightController,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -290,24 +304,30 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-            Container(
-              height: 50,
-              width: 200,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue[800]!, Colors.blue[400]!],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
+            GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ResultPage()));
+              },
+              child: Container(
+
+                height: 50,
+                width: 200,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue[800]!, Colors.blue[400]!],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  'Calculate',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                child: Center(
+                  child: Text(
+                    'Calculate',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
