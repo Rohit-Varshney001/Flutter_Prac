@@ -1,5 +1,6 @@
 import 'package:bmi_app/result_page.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 import 'drop_down.dart';
 
@@ -15,10 +16,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -347,7 +350,11 @@ class _MyHomePageState extends State<MyHomePage> {
                               selected_weight_val.toString(),
                           )));
                 } else {
-                  print("Invalid input");
+
+                  MotionToast.warning(
+                      title:  Text("Warning"),
+                      description:  Text("Invalid Input")
+                  ).show(context);
                 }
               },
               child: Container(

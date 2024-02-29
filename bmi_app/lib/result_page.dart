@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'model.dart';
+
 class ResultPage extends StatefulWidget {
   final String Age;
   final String Gender;
@@ -172,20 +174,14 @@ class _ResultPageState extends State<ResultPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Heading',
+                      'Quote of the Day: ',
                       style: TextStyle(
                         color: Colors.yellow.shade800,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'Lorem ipsum dolor sit amet consectetur adipiscing el',
-                      style: TextStyle(
-                          color: Colors.yellow.shade800,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
-                    ),
+                   FetchRandomQuote(),
                   ],
                 )),
           )
