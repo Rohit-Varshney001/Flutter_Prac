@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main()async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -37,16 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.blue),
+      themeMode: ThemeMode.light,
 
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
 
-        title: Text(widget.title),
-      ),
-      body: Center(
+      routes: {
+        "/" : (context) => SplashScreen(),
+    },
 
-      ),
     );
   }
 }
