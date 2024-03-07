@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:todo_app/database%20helper/check_user.dart';
+import 'package:todo_app/inside_grid.dart';
 import 'package:todo_app/login_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'database helper/services.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -13,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  Stream? collectionData;
   var nameChk = username;
   var nameLogin = name;
   List quotesList = [
@@ -24,6 +29,29 @@ class _HomePageState extends State<HomePage> {
   int current_index = 0;
 
   var arrColours = [Colors.orangeAccent, Colors.yellow,Colors.green,Colors.grey,Colors.orangeAccent, Colors.yellow,Colors.green,Colors.grey,Colors.black,Colors.red, Colors.yellow,Colors.green,Colors.grey,Colors.black ];
+
+
+
+  Widget buildDocumentText(BuildContext context, int index, AsyncSnapshot<QuerySnapshot> snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return CircularProgressIndicator();
+    }
+    if (snapshot.hasError) {
+      return Text('Error: ${snapshot.error}');
+    }
+    final List<DocumentSnapshot> documents = snapshot.data!.docs;
+    final String documentName = documents[index].id;
+    return Text(
+      documentName,
+      style: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+      ),
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +66,9 @@ class _HomePageState extends State<HomePage> {
             expandedHeight: 400.0,
             flexibleSpace: FlexibleSpaceBar(
 
-              title:Text(nameChk == null?
-                "Hii, $nameLogin":"Hii, $nameChk"
-                ,style: TextStyle(
+              title:Text(
+                "Hii, &User",
+                style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500
               ),),
@@ -162,32 +190,59 @@ class _HomePageState extends State<HomePage> {
           ),
           SliverPadding(
             padding: EdgeInsets.all(8.0),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisExtent: 210,
-                mainAxisSpacing: 10,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                  return Container(
-                    color: arrColours[index],
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      // child: Text(
-                      //   quotesList[index]["quote"],
-                      //   style: TextStyle(
-                      //     color: Colors.white,
-                      //     fontWeight: FontWeight.bold,
-                      //     fontSize: 20,
-                      //   ),
-                      // ),
+            sliver: FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance.collection(nameChk ?? nameLogin).get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SliverToBoxAdapter(
+                    child: Container(
+                      width: 0,
+                      height: 0,
+                    )
+                  );
+                }
+                if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('Error: ${snapshot.error}'),
                     ),
                   );
-                },
-                childCount: arrColours.length,
-              ),
+                }
+                final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisExtent: 210,
+                    mainAxisSpacing: 10,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      final String documentName = documents[index].id;
+                      return GestureDetector(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CompleteDocument(heading: documentName)));
+                        },
+                        child: Container(
+                          color: arrColours[index % arrColours.length],
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                              documentName,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: documents.length,
+                  ),
+                );
+              },
             ),
           )
 

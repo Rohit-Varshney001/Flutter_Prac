@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:todo_app/home_page.dart';
 import 'package:todo_app/login_page.dart';
 
+import '../slider/slider_screen.dart';
+
 
 var username;
 
@@ -29,7 +31,7 @@ class _CheckUserState extends State<CheckUser> {
     if (user != null) {
       _widgetToDisplay = HomePage();
     } else {
-      _widgetToDisplay = LoginPage();
+      _widgetToDisplay = SliderScreenState();
     setState(() {}); // Trigger a rebuild to display the correct widget
   }
 
