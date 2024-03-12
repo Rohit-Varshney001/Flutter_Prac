@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildDocumentText(BuildContext context, int index, AsyncSnapshot<QuerySnapshot> snapshot) {
     if (snapshot.connectionState == ConnectionState.waiting) {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     }
     if (snapshot.hasError) {
       return Text('Error: ${snapshot.error}');

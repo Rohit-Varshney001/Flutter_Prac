@@ -39,9 +39,6 @@ class _ShowDataState extends State<ShowData> {
             return const Center(child: Text("No Data Found"));
           }
 
-          // Access the 'items' list from the data map
-
-
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: GridView.builder(
@@ -50,23 +47,21 @@ class _ShowDataState extends State<ShowData> {
                 crossAxisSpacing: 10, // Spacing between columns
                 mainAxisSpacing: 10, // Spacing between rows
                 mainAxisExtent: 210,
-
               ),
               itemCount: data.length,
               itemBuilder: (context, index) {
                 // Access the key and value pair for each item
                 final entry = data.entries.elementAt(index);
                 final String workName = entry.key;
-                final Map<String, dynamic> workData = entry.value;
+                final String workDescription = entry.value.toString(); // Assuming the value directly represents the description string
 
                 return GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkEdit(workHeading: workName,workData: workData,)));
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkEdit(workHeading: workName, workDescription: workDescription)));
                   },
                   child: Card(
                     shadowColor: Colors.black,
                     elevation: 5,
-
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -79,7 +74,12 @@ class _ShowDataState extends State<ShowData> {
                               fontSize: 28,
                             ),
                           ),
-
+                          Text(
+                            workDescription,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -93,3 +93,4 @@ class _ShowDataState extends State<ShowData> {
     );
   }
 }
+

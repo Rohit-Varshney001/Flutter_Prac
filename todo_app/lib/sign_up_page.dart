@@ -10,7 +10,7 @@ import 'package:todo_app/login_page.dart';
 import 'package:todo_app/uiHelper/ui_helper.dart';
 
 
-
+String collectionId = "";
 
 class SignUp_page extends StatefulWidget {
   const SignUp_page({super.key});
@@ -58,6 +58,8 @@ class _SignUp_pageState extends State<SignUp_page> {
           UserCredential? userCredential;
           try{
             userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).then((value){
+              collectionId = value.user!.uid;
+
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
             });
           }
