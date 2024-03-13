@@ -59,6 +59,64 @@ class _ShowDataState extends State<ShowData> {
                   onTap: () {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => WorkEdit(workHeading: workName, workDescription: workDescription)));
                   },
+                  onLongPress: () {
+                    showDialog(
+                      barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Confirm Delete'),
+                          content: Text('Are you sure you want to delete this item?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                // Show a loading indicator
+                                showDialog(
+                                  barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Deleting...'),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          CircularProgressIndicator(), // Circular loading indicator
+                                          SizedBox(height: 10),
+                                          Text('Please wait...'), // Optional message
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+
+                                // Get the reference to the Firestore document
+                                final docRef = await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(widget.heading);
+                                final Map<String, dynamic> updates = {
+                                  workName: FieldValue.delete(),
+                                };
+
+                                // Update the document to delete the specified field
+                                await docRef.update(updates);
+
+                                Navigator.of(context).pop(); // Close the dialog
+                                Navigator.of(context).pop(); // Close the confirmation dialog
+                              },
+
+                              child: Text('Delete'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+
+
                   child: Card(
                     shadowColor: Colors.black,
                     elevation: 5,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:todo_app/add_work.dart';
 import 'package:todo_app/database%20helper/check_user.dart';
+import 'package:todo_app/database%20helper/services.dart';
 import 'package:todo_app/inside_grid.dart';
 import 'package:todo_app/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
-import 'database helper/services.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
           SliverPadding(
             padding: EdgeInsets.all(8.0),
             sliver: FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance.collection(nameChk ?? nameLogin).get(),
+              future: FirebaseFirestore.instance.collection(nameLogin ?? nameChk).get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(
@@ -250,10 +252,15 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
-        onPressed: () {},
+        onPressed: () {
+          AddWorkPopup(context);
+
+        },
         child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
     );
   }
+
 }
+
 
