@@ -6,6 +6,8 @@ import 'package:todo_app/inside_grid.dart';
 import 'package:todo_app/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 
@@ -154,9 +156,67 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 100,
                         width: 100,
-                        child: ClipOval(
-                          child:  Image.asset("assets/images/profile_logo.png"),
-                          clipBehavior: Clip.hardEdge,
+                        child: GestureDetector(
+                          onTap: (){
+                            showDialog(
+                              barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Confirm LogOut'),
+                                  content: Text('Are you sure you want to Log out your account?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                      },
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        // Show a loading indicator
+                                        showDialog(
+                                          barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('Logging Out...'),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  CircularProgressIndicator(), // Circular loading indicator
+                                                  SizedBox(height: 10),
+                                                  Text('Please wait...'), // Optional message
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+
+                                        // Get the reference to the Firestore document
+                                        FirebaseAuth.instance.signOut().then((value) {
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder:
+                                              (context) => LoginPage()));
+                                        });
+
+
+                                        // Update the document to delete the specified field
+
+                                        Navigator.of(context).pop(); // Close the dialog
+                                        Navigator.of(context).pop(); // Close the confirmation dialog
+                                      },
+
+                                      child: Text('Logout'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: ClipOval(
+                            child:  Image.asset("assets/images/profile_logo.png"),
+                            clipBehavior: Clip.hardEdge,
+                          ),
                         ),
                       ),
                     ],
