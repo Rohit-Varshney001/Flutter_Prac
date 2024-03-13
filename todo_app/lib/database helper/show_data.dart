@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/work_edit.dart';
 
 import '../login_page.dart';
+import '../uiHelper/dotted_line.dart';
 import 'check_user.dart';
 
 class ShowData extends StatefulWidget {
@@ -57,7 +58,7 @@ class _ShowDataState extends State<ShowData> {
 
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkEdit(workHeading: workName, workDescription: workDescription)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkEdit(workHeading: workName, workDescription: workDescription, documentName: widget.heading,)));
                   },
                   onLongPress: () {
                     showDialog(
@@ -118,6 +119,7 @@ class _ShowDataState extends State<ShowData> {
 
 
                   child: Card(
+                    color: Colors.deepPurpleAccent,
                     shadowColor: Colors.black,
                     elevation: 5,
                     child: Padding(
@@ -125,17 +127,36 @@ class _ShowDataState extends State<ShowData> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            workName,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 28,
+                          Flexible(
+                            child: Text(
+                              workName,
+                              overflow:TextOverflow.visible,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 28,
+                                color: Colors.white
+                              ),
                             ),
                           ),
-                          Text(
-                            workDescription,
-                            style: const TextStyle(
-                              fontSize: 16,
+
+                          Container(
+                            height: 1,
+                            margin: EdgeInsets.symmetric(vertical: 8.0), // Adjust margin as needed
+                            child: CustomPaint(
+                              size: Size(400, 1), // Adjust size as needed
+                              painter: DottedLinePainter(), // Custom painter for dotted line
+                            ),
+                          ),
+                          Flexible(
+
+                            child: Text(
+                              workDescription,
+                              overflow: TextOverflow.visible,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                  color: Colors.white
+
+                              ),
                             ),
                           ),
                         ],

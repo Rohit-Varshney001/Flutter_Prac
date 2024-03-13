@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:todo_app/add_work.dart';
 import 'package:todo_app/database%20helper/check_user.dart';
-import 'package:todo_app/database%20helper/services.dart';
 import 'package:todo_app/inside_grid.dart';
 import 'package:todo_app/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +21,7 @@ class _HomePageState extends State<HomePage> {
   Stream? collectionData;
   var nameChk = username;
   var nameLogin = name;
+  TextEditingController categoryEditController = TextEditingController();
   List quotesList = [
     {"id": 1, "quote": "\"Success is not final, Failure is not fatal; it is the courage to continue that counts\""},
     {"id": 2, "quote": "\"If you set your goals ridiculously high and it's a failure, you will fail above everyone else's success.\""},
@@ -30,8 +30,73 @@ class _HomePageState extends State<HomePage> {
   CarouselController carouselController = CarouselController();
   int current_index = 0;
 
-  var arrColours = [Colors.orangeAccent, Colors.yellow,Colors.green,Colors.grey,Colors.orangeAccent, Colors.yellow,Colors.green,Colors.grey,Colors.black,Colors.red, Colors.yellow,Colors.green,Colors.grey,Colors.black ];
-
+  var arrColours  = [
+    LinearGradient(
+      colors: [Colors.orange, Colors.orangeAccent.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.green, Colors.teal.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.amber, Colors.yellow.shade200],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.green, Colors.lightGreen.shade200],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.grey, Colors.blueGrey.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.orangeAccent, Colors.deepOrange.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.yellow, Colors.orange.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.green, Colors.teal.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.grey, Colors.blueGrey.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.black, Colors.grey.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.red, Colors.redAccent.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.yellow, Colors.amber.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [Colors.black54, Colors.grey.shade100],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+  ];
 
 
   Widget buildDocumentText(BuildContext context, int index, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -226,17 +291,170 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(context, MaterialPageRoute(builder: (context)=>CompleteDocument(heading: documentName)));
                         },
                         child: Container(
-                          color: arrColours[index % arrColours.length],
-                          child: Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Text(
-                              documentName,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                          decoration: BoxDecoration(
+                            gradient: arrColours[index % arrColours.length],
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.all(20.0),
+                                child: Flexible(
+                                  child: Text(
+                                    documentName,
+                                    overflow: TextOverflow.visible,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+
                               ),
-                            ),
+                              PopupMenuButton(
+                                icon: Icon(Icons.more_vert,
+                                color: Colors.white,),
+                                itemBuilder: (BuildContext context) {
+                                  return [
+                                    PopupMenuItem(
+                                      child: ListTile(
+                                        leading: Icon(Icons.edit,color: Colors.deepPurpleAccent,),
+                                        title: Text('Edit',style: TextStyle(color: Colors.deepPurpleAccent),),
+                                        onTap: (){
+                                          showDialog(
+                                            barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Edit Category',style: TextStyle(color: Colors.deepPurple,fontWeight: FontWeight.bold),),
+                                                content: TextField(
+                                                  controller: categoryEditController,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Work Category',
+                                                    hintText: documentName,
+                                                    border: OutlineInputBorder(),enabledBorder:OutlineInputBorder() ,
+                                                    filled: true,
+                                                    fillColor: Colors.deepPurple.withOpacity(0.1),
+                                                  ),
+                                                ),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(); // Close the dialog
+                                                    },
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      // Show a loading indicator
+                                                      showDialog(
+                                                        barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Text('Updating...'),
+                                                            content: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                CircularProgressIndicator(), // Circular loading indicator
+                                                                SizedBox(height: 10),
+                                                                Text('Please wait...'), // Optional message
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+
+                                                      // Get the reference to the Firestore document
+                                                      final oldDocRef = FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName);
+                                                      final oldDocSnapshot = await oldDocRef.get();
+
+                                                      // Create a new document with the desired ID
+                                                      final newDocRef = FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(categoryEditController.text.toString());
+
+                                                      // Copy data from old document to new document
+                                                      await newDocRef.set(oldDocSnapshot.data()!);
+
+                                                      // Delete the old document if necessary
+                                                      await oldDocRef.delete();
+
+                                                      // Close the dialogs
+                                                      Navigator.of(context).pop(); // Close the "Updating" dialog
+                                                      Navigator.of(context).pop(); // Close the confirmation dialog
+                                                    },
+                                                    child: Text('Update'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    PopupMenuItem(
+                                      child: ListTile(
+                                        leading: Icon(Icons.delete,color: Colors.deepPurpleAccent,),
+                                        title: Text('Delete',style: TextStyle(color: Colors.deepPurpleAccent),),
+                                        onTap: (){
+                                          showDialog(
+                                            barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: Text('Confirm Delete'),
+                                                content: Text('Are you sure you want to delete this item?'),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context).pop(); // Close the dialog
+                                                    },
+                                                    child: Text('Cancel'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () async {
+                                                      // Show a loading indicator
+                                                      showDialog(
+                                                        barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                                        context: context,
+                                                        builder: (BuildContext context) {
+                                                          return AlertDialog(
+                                                            title: Text('Deleting...'),
+                                                            content: Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                CircularProgressIndicator(), // Circular loading indicator
+                                                                SizedBox(height: 10),
+                                                                Text('Please wait...'), // Optional message
+                                                              ],
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+
+                                                      // Get the reference to the Firestore document
+                                                    await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName).delete();
+
+                                                      // Update the document to delete the specified fiel
+                                                      Navigator.of(context).pop(); // Close the dialog
+                                                      Navigator.of(context).pop(); // Close the confirmation dialog
+                                                    },
+
+                                                    child: Text('Delete'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ];
+                                },
+                              ),
+
+                            ],
                           ),
                         ),
                       );

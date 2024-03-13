@@ -96,7 +96,7 @@ class _SliderScreenStateState extends State<SliderScreenState> {
             children: [
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),
@@ -124,7 +124,7 @@ class _SliderScreenStateState extends State<SliderScreenState> {
               ),
               GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),
