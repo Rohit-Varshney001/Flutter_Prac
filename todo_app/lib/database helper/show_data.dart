@@ -122,45 +122,75 @@ class _ShowDataState extends State<ShowData> {
                     color: Colors.deepPurpleAccent,
                     shadowColor: Colors.black,
                     elevation: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              workName,
-                              overflow:TextOverflow.visible,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 28,
-                                color: Colors.white
-                              ),
-                            ),
-                          ),
-
-                          Container(
-                            height: 1,
-                            margin: EdgeInsets.symmetric(vertical: 8.0), // Adjust margin as needed
-                            child: CustomPaint(
-                              size: Size(400, 1), // Adjust size as needed
-                              painter: DottedLinePainter(), // Custom painter for dotted line
-                            ),
-                          ),
-                          Flexible(
-
-                            child: Text(
-                              workDescription,
-                              overflow: TextOverflow.visible,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                  color: Colors.white
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Text(
+                                  workName,
+                                  overflow:TextOverflow.fade,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28,
+                                      color: Colors.white
+                                  ),
+                                ),
 
                               ),
+
+                              Container(
+                                height: 1,
+                                margin: EdgeInsets.symmetric(vertical: 8.0), // Adjust margin as needed
+                                child: CustomPaint(
+                                  size: Size(400, 1), // Adjust size as needed
+                                  painter: DottedLinePainter(), // Custom painter for dotted line
+                                ),
+                              ),
+                              Flexible(
+
+                                child: Text(
+                                  workDescription,
+                                  overflow: TextOverflow.visible,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                      color: Colors.white
+
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.2), // Set the color and opacity of circles
+                            ),
+                            margin: EdgeInsets.only(
+                              right: 50, // Adjust the left margin of circles
+                              top: 100, // Adjust the top margin of circles
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withOpacity(0.2), // Set the color and opacity of circles
+                            ),
+                            margin: EdgeInsets.only(
+                              left: 100, // Adjust the left margin of circles
+                              top: 40, // Adjust the top margin of circles
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );

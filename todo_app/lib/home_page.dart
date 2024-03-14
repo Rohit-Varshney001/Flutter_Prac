@@ -99,6 +99,7 @@ class _HomePageState extends State<HomePage> {
       end: Alignment.bottomRight,
     ),
   ];
+  Stream<QuerySnapshot>? futureSnapshot;
 
 
   Widget buildDocumentText(BuildContext context, int index, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -120,7 +121,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    futureSnapshot = FirebaseFirestore.instance.collection(nameLogin ?? nameChk).snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +141,7 @@ class _HomePageState extends State<HomePage> {
             flexibleSpace: FlexibleSpaceBar(
 
               title:Text(
-                "Hii, &User",
+                "Hii, $user_name",
                 style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500
@@ -148,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children:  [
 
-                      Text("Hii, &user", style: TextStyle(
+                      Text("Hii, $user_name", style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w400,
                           color: Colors.white
@@ -179,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                                           barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
                                           context: context,
                                           builder: (BuildContext context) {
-                                            return AlertDialog(
+                                            return const AlertDialog(
                                               title: Text('Logging Out...'),
                                               content: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -270,6 +275,7 @@ class _HomePageState extends State<HomePage> {
                                   scrollPhysics: BouncingScrollPhysics(),
                                   autoPlay: true,
                                   aspectRatio: 1.5,
+                                  autoPlayInterval: Duration(seconds: 3),
                                   viewportFraction: 1,
                                   enlargeCenterPage: true,
                                   enlargeStrategy: CenterPageEnlargeStrategy.height,
@@ -279,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                                     });
                                   })),
                           Positioned(
-                              bottom: 0,
+                              bottom: 10,
                               left: 0,
                               right: 0,
                               child: Row(
@@ -317,8 +323,8 @@ class _HomePageState extends State<HomePage> {
           ),
           SliverPadding(
             padding: EdgeInsets.all(8.0),
-            sliver: FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance.collection(nameLogin ?? nameChk).get(),
+            sliver: StreamBuilder<QuerySnapshot>(
+              stream: futureSnapshot,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(
@@ -358,9 +364,9 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Flexible(
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.0),
                                   child: Text(
                                     documentName,
                                     overflow: TextOverflow.visible,
@@ -370,8 +376,8 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 20,
                                     ),
                                   ),
+                                
                                 ),
-
                               ),
                               PopupMenuButton(
                                 icon: Icon(Icons.more_vert,

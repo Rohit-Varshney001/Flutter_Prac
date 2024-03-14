@@ -28,6 +28,7 @@ class _SliderScreenStateState extends State<SliderScreenState> {
           Stack(
             children: [
               CarouselSlider(
+
                   items: imgList
                       .map((item) => Image.asset(
                             item['image_path'],
@@ -36,9 +37,12 @@ class _SliderScreenStateState extends State<SliderScreenState> {
                           ))
                       .toList(),
                   carouselController: carouselController,
+
                   options: CarouselOptions(
                       scrollPhysics: BouncingScrollPhysics(),
                       autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayCurve: Curves.fastOutSlowIn,
                       aspectRatio: 1,
                       viewportFraction: 1,
                       enlargeCenterPage: true,
@@ -55,8 +59,6 @@ class _SliderScreenStateState extends State<SliderScreenState> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: imgList.asMap().entries.map((entry) {
-                      print(entry);
-                      print(entry.key);
 
                       return GestureDetector(
                         onTap: () =>
