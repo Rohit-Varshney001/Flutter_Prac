@@ -141,7 +141,11 @@ class _HomePageState extends State<HomePage> {
             flexibleSpace: FlexibleSpaceBar(
 
               title:Text(
+
                 "Hii, ${user_name_login ?? user_name_chk}",
+
+        
+
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500
@@ -153,7 +157,11 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children:  [
 
+
                       Text("Hii, ${user_name_login ?? user_name_chk}", style: TextStyle(
+
+         
+
                           fontSize: 30,
                           fontWeight: FontWeight.w400,
                           color: Colors.white

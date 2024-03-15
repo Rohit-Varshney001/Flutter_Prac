@@ -26,6 +26,7 @@ class _CompleteDocumentState extends State<CompleteDocument> {
       appBar: AppBar(
         title: Text(widget.heading), // Accessing the heading passed to the widget
       ),
+
       body: ShowData(heading: widget.heading,),
       floatingActionButton:  FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
@@ -82,8 +83,29 @@ class _CompleteDocumentState extends State<CompleteDocument> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 25,
+
                             ),
+                            onPressed: _isLoading
+                                ? null
+                                : () {
+                              setState(() {
+                                _isLoading = true; // Set loading state to true
+                              });
+                              DatabaseMethods.addWork(
+                                widget.heading,
+                                workNameController.text.toString(),
+                                workDescController.text.toString(),
+                              ).then((value) {
+                                setState(() {
+                                  _isLoading = false;
+                                  workNameController.clear();
+                                  workDescController.clear();
+                                });
+                                Navigator.pop(context);
+                              });
+                            },
                           ),
+
                           onPressed: _isLoading
                               ? null
                               : () {

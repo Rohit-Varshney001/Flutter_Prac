@@ -31,9 +31,11 @@ class _CheckUserState extends State<CheckUser> {
 
 
 
+
     user_name_chk = user?.email;
     user_name_chk = user_name_chk.toString().length > 7 ? user?.email.toString().substring(0, 7).toUpperCase() : user?.email.toString().toUpperCase();
     print (user_name_chk);
+
 
 
 

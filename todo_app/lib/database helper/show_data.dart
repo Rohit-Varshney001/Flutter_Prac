@@ -157,7 +157,9 @@ class _ShowDataState extends State<ShowData> {
                                   workDescription,
                                   overflow: TextOverflow.visible,
                                   style: const TextStyle(
+
                                       fontSize: 16,
+
                                       color: Colors.white
 
                                   ),
