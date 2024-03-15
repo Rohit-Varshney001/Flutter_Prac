@@ -5,7 +5,7 @@ import 'package:todo_app/login_page.dart';
 
 import '../slider/slider_screen.dart';
 
-
+var user_name_chk;
 var username;
 
 class CheckUser extends StatefulWidget {
@@ -27,16 +27,26 @@ class _CheckUserState extends State<CheckUser> {
 
   Future<void> checkUser() async {
     final user = FirebaseAuth.instance.currentUser;
+    print("====================");
+
+
+
+    user_name_chk = user?.email;
+    user_name_chk = user_name_chk.toString().length > 7 ? user?.email.toString().substring(0, 7).toUpperCase() : user?.email.toString().toUpperCase();
+    print (user_name_chk);
+
+
+
     username = user?.uid;
     if (user != null) {
       _widgetToDisplay = HomePage();
     } else {
       _widgetToDisplay = SliderScreenState();
-    setState(() {}); // Trigger a rebuild to display the correct widget
+      setState(() {}); // Trigger a rebuild to display the correct widget
+    }
+
+
   }
-
-
-}
 
   @override
   Widget build(BuildContext context) {

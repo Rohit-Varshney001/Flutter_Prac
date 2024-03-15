@@ -11,6 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 var name;
+var user_name_login;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -34,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
       try{
         userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password).then((value){
           name = value.user?.uid;
+          user_name_login = value.user?.email;
+          user_name_login = user_name_login.toString().length > 7 ? value.user?.email.toString().substring(0, 7).toUpperCase():value.user?.email.toString().toUpperCase();
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
         });
       }

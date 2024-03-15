@@ -28,17 +28,21 @@ class _SliderScreenStateState extends State<SliderScreenState> {
           Stack(
             children: [
               CarouselSlider(
+
                   items: imgList
                       .map((item) => Image.asset(
-                            item['image_path'],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ))
+                    item['image_path'],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ))
                       .toList(),
                   carouselController: carouselController,
+
                   options: CarouselOptions(
                       scrollPhysics: BouncingScrollPhysics(),
                       autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 3),
+                      autoPlayCurve: Curves.fastOutSlowIn,
                       aspectRatio: 1,
                       viewportFraction: 1,
                       enlargeCenterPage: true,
@@ -55,8 +59,6 @@ class _SliderScreenStateState extends State<SliderScreenState> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: imgList.asMap().entries.map((entry) {
-                      print(entry);
-                      print(entry.key);
 
                       return GestureDetector(
                         onTap: () =>
@@ -88,7 +90,7 @@ class _SliderScreenStateState extends State<SliderScreenState> {
               Text(
                 "Life is short, make your To-Do list count",
                 style: TextStyle(fontSize: 20,
-                color: Colors.black54),
+                    color: Colors.black54),
               ),
             ],
           ),

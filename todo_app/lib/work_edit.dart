@@ -39,13 +39,21 @@ class _WorkEditState extends State<WorkEdit> {
           decoration: InputDecoration(
             border: InputBorder.none,
           ),
-          style: TextStyle(color: Colors.white70, fontSize: 25, fontWeight: FontWeight.bold), // Text color
+          style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold), // Text color
         ),
+        leading: IconButton(
+          icon: BackButton(),
+          color: Colors.white, // Change this to the desired color
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [ Colors.white10,Colors.black26],
+            colors: [ Colors.white10,Colors.black45],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -65,6 +73,7 @@ class _WorkEditState extends State<WorkEdit> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurpleAccent,
         onPressed: () async {
           String editedTitle = _headingController.text.toString();
           String editedDesc = _descriptionController.text.toString();
@@ -104,7 +113,7 @@ class _WorkEditState extends State<WorkEdit> {
 
           Navigator.pop(context); // Close the edit screen
         },
-        child: Icon(Icons.save),
+        child: Icon(Icons.save, size: 28,color: Colors.white,),
       ),
     );
   }

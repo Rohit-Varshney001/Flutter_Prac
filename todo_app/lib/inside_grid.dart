@@ -26,104 +26,94 @@ class _CompleteDocumentState extends State<CompleteDocument> {
       appBar: AppBar(
         title: Text(widget.heading), // Accessing the heading passed to the widget
       ),
-        body: ShowData(heading: widget.heading,),
-        floatingActionButton:  Container(
-          height: 60,
-          width: 60,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-              colors: [Colors.purple, Colors.deepOrange],
-            ),
-          ),
-          child: FloatingActionButton(
-            backgroundColor: Colors.transparent,
-            child: const Icon(Icons.add),
-            onPressed: (){
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: 300,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextField(
-                              controller: workNameController,
-                              decoration: InputDecoration(
-                                labelText: 'Work Name',
-                                border: OutlineInputBorder(),
-                                filled: true,
-                                fillColor: Colors.grey.withOpacity(0.1),
-                              ),
-                            ),
+      body: ShowData(heading: widget.heading,),
+      floatingActionButton:  FloatingActionButton(
+        backgroundColor: Colors.deepPurpleAccent,
+        child: const Icon(Icons.add,color: Colors.white,size: 28,),
+        onPressed: (){
+          showModalBottomSheet(
+            context: context,
+            builder: (BuildContext context) {
+              return Container(
+                height: 300,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextField(
+                          controller: workNameController,
+                          decoration: InputDecoration(
+                            labelText: 'Work Name',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.grey.withOpacity(0.1),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: TextField(
-                              controller: workDescController,
-                              decoration: InputDecoration(
-                                labelText: 'Work Desc',
-                                border: OutlineInputBorder(),
-                                filled: true,
-                                fillColor: Colors.grey.withOpacity(0.1),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 24),
-                          _isLoading // Show loading indicator if _isLoading is true
-                              ? CircularProgressIndicator()
-                              : Container(
-                                height: 40,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  gradient: LinearGradient(
-                                    colors: [Colors.purple, Colors.deepPurpleAccent],
-                                  ),
-                                ),
-                                child: TextButton(
-                                  child: const Text(
-                                    "Add",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                    ),
-                                  ),
-                                onPressed: _isLoading
-                                    ? null
-                                    : () {
-                                  setState(() {
-                                    _isLoading = true; // Set loading state to true
-                                  });
-                                  DatabaseMethods.addWork(
-                                    widget.heading,
-                                    workNameController.text.toString(),
-                                    workDescController.text.toString(),
-                                  ).then((value) {
-                                    setState(() {
-                                      _isLoading = false;
-                                      workNameController.clear();
-                                      workDescController.clear();
-                                    });
-                                    Navigator.pop(context);
-                                  });
-                                },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: TextField(
+                          controller: workDescController,
+                          decoration: InputDecoration(
+                            labelText: 'Work Desc',
+                            border: OutlineInputBorder(),
+                            filled: true,
+                            fillColor: Colors.grey.withOpacity(0.1),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 24),
+                      _isLoading // Show loading indicator if _isLoading is true
+                          ? CircularProgressIndicator()
+                          : Container(
+                        height: 40,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          gradient: LinearGradient(
+                            colors: [Colors.purple, Colors.deepPurpleAccent],
+                          ),
+                        ),
+                        child: TextButton(
+                          child: const Text(
+                            "Add",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                            ),
+                          ),
+                          onPressed: _isLoading
+                              ? null
+                              : () {
+                            setState(() {
+                              _isLoading = true; // Set loading state to true
+                            });
+                            DatabaseMethods.addWork(
+                              widget.heading,
+                              workNameController.text.toString(),
+                              workDescController.text.toString(),
+                            ).then((value) {
+                              setState(() {
+                                _isLoading = false;
+                                workNameController.clear();
+                                workDescController.clear();
+                              });
+                              Navigator.pop(context);
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
-
             },
-          ),
-        )
+          );
+
+        },
+      ),
 
     );
   }

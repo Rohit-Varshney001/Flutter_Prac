@@ -6,6 +6,8 @@ import 'package:todo_app/inside_grid.dart';
 import 'package:todo_app/login_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 
 
@@ -97,6 +99,7 @@ class _HomePageState extends State<HomePage> {
       end: Alignment.bottomRight,
     ),
   ];
+  Stream<QuerySnapshot>? futureSnapshot;
 
 
   Widget buildDocumentText(BuildContext context, int index, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -118,7 +121,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
+  @override
+  void initState() {
+    super.initState();
+    futureSnapshot = FirebaseFirestore.instance.collection(nameLogin ?? nameChk).snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,11 +141,11 @@ class _HomePageState extends State<HomePage> {
             flexibleSpace: FlexibleSpaceBar(
 
               title:Text(
-                "Hii, &User",
+                "Hii, ${user_name_login ?? user_name_chk}",
                 style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500
-              ),),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500
+                ),),
               background: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -146,7 +153,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children:  [
 
-                      Text("Hii, &user", style: TextStyle(
+                      Text("Hii, ${user_name_login ?? user_name_chk}", style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w400,
                           color: Colors.white
@@ -154,9 +161,67 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 100,
                         width: 100,
-                        child: ClipOval(
-                          child:  Image.asset("assets/images/profile_logo.png"),
-                          clipBehavior: Clip.hardEdge,
+                        child: GestureDetector(
+                          onTap: (){
+                            showDialog(
+                              barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Confirm LogOut'),
+                                  content: Text('Are you sure you want to Log out your account?'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(); // Close the dialog
+                                      },
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        // Show a loading indicator
+                                        showDialog(
+                                          barrierDismissible: false, // Prevent dismissing the dialog when tapped outside
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const AlertDialog(
+                                              title: Text('Logging Out...'),
+                                              content: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  CircularProgressIndicator(), // Circular loading indicator
+                                                  SizedBox(height: 10),
+                                                  Text('Please wait...'), // Optional message
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        );
+
+                                        // Get the reference to the Firestore document
+                                        FirebaseAuth.instance.signOut().then((value) {
+                                          Navigator.pushReplacement(context, MaterialPageRoute(builder:
+                                              (context) => LoginPage()));
+                                        });
+
+
+                                        // Update the document to delete the specified field
+
+                                        Navigator.of(context).pop(); // Close the dialog
+                                        Navigator.of(context).pop(); // Close the confirmation dialog
+                                      },
+
+                                      child: Text('Logout'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          child: ClipOval(
+                            child:  Image.asset("assets/images/profile_logo.png"),
+                            clipBehavior: Clip.hardEdge,
+                          ),
                         ),
                       ),
                     ],
@@ -210,6 +275,7 @@ class _HomePageState extends State<HomePage> {
                                   scrollPhysics: BouncingScrollPhysics(),
                                   autoPlay: true,
                                   aspectRatio: 1.5,
+                                  autoPlayInterval: Duration(seconds: 3),
                                   viewportFraction: 1,
                                   enlargeCenterPage: true,
                                   enlargeStrategy: CenterPageEnlargeStrategy.height,
@@ -219,7 +285,7 @@ class _HomePageState extends State<HomePage> {
                                     });
                                   })),
                           Positioned(
-                              bottom: 0,
+                              bottom: 10,
                               left: 0,
                               right: 0,
                               child: Row(
@@ -257,15 +323,15 @@ class _HomePageState extends State<HomePage> {
           ),
           SliverPadding(
             padding: EdgeInsets.all(8.0),
-            sliver: FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance.collection(nameLogin ?? nameChk).get(),
+            sliver: StreamBuilder<QuerySnapshot>(
+              stream: futureSnapshot,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(
-                    child: Container(
-                      width: 0,
-                      height: 0,
-                    )
+                      child: Container(
+                        width: 0,
+                        height: 0,
+                      )
                   );
                 }
                 if (snapshot.hasError) {
@@ -298,9 +364,9 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.all(20.0),
-                                child: Flexible(
+                              Flexible(
+                                child: Padding(
+                                  padding: EdgeInsets.all(20.0),
                                   child: Text(
                                     documentName,
                                     overflow: TextOverflow.visible,
@@ -310,12 +376,12 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 20,
                                     ),
                                   ),
-                                ),
 
+                                ),
                               ),
                               PopupMenuButton(
                                 icon: Icon(Icons.more_vert,
-                                color: Colors.white,),
+                                  color: Colors.white,),
                                 itemBuilder: (BuildContext context) {
                                   return [
                                     PopupMenuItem(
@@ -434,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                                                       );
 
                                                       // Get the reference to the Firestore document
-                                                    await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName).delete();
+                                                      await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName).delete();
 
                                                       // Update the document to delete the specified fiel
                                                       Navigator.of(context).pop(); // Close the dialog
@@ -480,5 +546,3 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
-
-
