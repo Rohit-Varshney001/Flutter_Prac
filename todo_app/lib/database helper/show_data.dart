@@ -47,14 +47,14 @@ class _ShowDataState extends State<ShowData> {
                 crossAxisCount: 2, // Number of columns in the grid
                 crossAxisSpacing: 10, // Spacing between columns
                 mainAxisSpacing: 10, // Spacing between rows
-                mainAxisExtent: 210,
+                mainAxisExtent: 250,
               ),
               itemCount: data.length,
               itemBuilder: (context, index) {
                 // Access the key and value pair for each item
                 final entry = data.entries.elementAt(index);
                 final String workName = entry.key;
-                final String workDescription = entry.value.toString(); // Assuming the value directly represents the description string
+                final String workDescription = entry.value.toString();
 
                 return GestureDetector(
                   onTap: () {
@@ -121,6 +121,7 @@ class _ShowDataState extends State<ShowData> {
                   child: Card(
                     color: Colors.deepPurpleAccent,
                     shadowColor: Colors.black,
+
                     elevation: 5,
                     child: Stack(
                       children: [
@@ -129,11 +130,11 @@ class _ShowDataState extends State<ShowData> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
+                              Flexible(
                                 flex: 1,
                                 child: Text(
                                   workName,
-                                  overflow:TextOverflow.fade,
+                                  overflow:TextOverflow.ellipsis,
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 28,
@@ -145,7 +146,7 @@ class _ShowDataState extends State<ShowData> {
 
                               Container(
                                 height: 1,
-                                margin: EdgeInsets.symmetric(vertical: 8.0), // Adjust margin as needed
+                                margin: EdgeInsets.only(bottom: 10.0,top: 10), // Adjust margin as needed
                                 child: CustomPaint(
                                   size: Size(400, 1), // Adjust size as needed
                                   painter: DottedLinePainter(), // Custom painter for dotted line

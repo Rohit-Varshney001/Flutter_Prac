@@ -6,7 +6,6 @@ import 'database helper/show_data.dart';
 class CompleteDocument extends StatefulWidget {
   final String heading;
 
-
   const CompleteDocument({Key? key, required this.heading}) : super(key: key);
 
   @override
@@ -18,19 +17,24 @@ class _CompleteDocumentState extends State<CompleteDocument> {
   TextEditingController workDescController = TextEditingController();
   bool _isLoading = false; // Add a boolean variable to track loading state
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.heading), // Accessing the heading passed to the widget
+        title:
+            Text(widget.heading), // Accessing the heading passed to the widget
       ),
-      body: ShowData(heading: widget.heading,),
-      floatingActionButton:  FloatingActionButton(
+      body: ShowData(
+        heading: widget.heading,
+      ),
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent,
-        child: const Icon(Icons.add,color: Colors.white,size: 28,),
-        onPressed: (){
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 28,
+        ),
+        onPressed: () {
           showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
@@ -69,52 +73,54 @@ class _CompleteDocumentState extends State<CompleteDocument> {
                       _isLoading // Show loading indicator if _isLoading is true
                           ? CircularProgressIndicator()
                           : Container(
-                        height: 40,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          gradient: LinearGradient(
-                            colors: [Colors.purple, Colors.deepPurpleAccent],
-                          ),
-                        ),
-                        child: TextButton(
-                          child: const Text(
-                            "Add",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
+                              height: 40,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.purple,
+                                    Colors.deepPurpleAccent
+                                  ],
+                                ),
+                              ),
+                              child: TextButton(
+                                child: const Text(
+                                  "Add",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                onPressed: _isLoading
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          _isLoading =
+                                              true; // Set loading state to true
+                                        });
+                                        DatabaseMethods.addWork(
+                                          widget.heading,
+                                          workNameController.text.toString(),
+                                          workDescController.text.toString(),
+                                        ).then((value) {
+                                          setState(() {
+                                            _isLoading = false;
+                                            workNameController.clear();
+                                            workDescController.clear();
+                                          });
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                              ),
                             ),
-                          ),
-                          onPressed: _isLoading
-                              ? null
-                              : () {
-                            setState(() {
-                              _isLoading = true; // Set loading state to true
-                            });
-                            DatabaseMethods.addWork(
-                              widget.heading,
-                              workNameController.text.toString(),
-                              workDescController.text.toString(),
-                            ).then((value) {
-                              setState(() {
-                                _isLoading = false;
-                                workNameController.clear();
-                                workDescController.clear();
-                              });
-                              Navigator.pop(context);
-                            });
-                          },
-                        ),
-                      ),
                     ],
                   ),
                 ),
               );
             },
           );
-
         },
       ),
-
     );
   }
 }
