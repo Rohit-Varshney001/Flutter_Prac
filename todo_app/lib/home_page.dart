@@ -141,11 +141,15 @@ class _HomePageState extends State<HomePage> {
             flexibleSpace: FlexibleSpaceBar(
 
               title:Text(
-                "Hii, $user_name",
+
+                "Hii, ${user_name_login ?? user_name_chk}",
+
+        
+
                 style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500
-              ),),
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500
+                ),),
               background: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -153,7 +157,11 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children:  [
 
-                      Text("Hii, $user_name", style: TextStyle(
+
+                      Text("Hii, ${user_name_login ?? user_name_chk}", style: TextStyle(
+
+         
+
                           fontSize: 30,
                           fontWeight: FontWeight.w400,
                           color: Colors.white
@@ -328,10 +336,10 @@ class _HomePageState extends State<HomePage> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return SliverToBoxAdapter(
-                    child: Container(
-                      width: 0,
-                      height: 0,
-                    )
+                      child: Container(
+                        width: 0,
+                        height: 0,
+                      )
                   );
                 }
                 if (snapshot.hasError) {
@@ -376,12 +384,12 @@ class _HomePageState extends State<HomePage> {
                                       fontSize: 20,
                                     ),
                                   ),
-                                
+
                                 ),
                               ),
                               PopupMenuButton(
                                 icon: Icon(Icons.more_vert,
-                                color: Colors.white,),
+                                  color: Colors.white,),
                                 itemBuilder: (BuildContext context) {
                                   return [
                                     PopupMenuItem(
@@ -500,7 +508,7 @@ class _HomePageState extends State<HomePage> {
                                                       );
 
                                                       // Get the reference to the Firestore document
-                                                    await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName).delete();
+                                                      await FirebaseFirestore.instance.collection(nameChk ?? nameLogin).doc(documentName).delete();
 
                                                       // Update the document to delete the specified fiel
                                                       Navigator.of(context).pop(); // Close the dialog
@@ -546,5 +554,3 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
-
-

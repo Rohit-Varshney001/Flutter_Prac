@@ -31,10 +31,10 @@ class _SliderScreenStateState extends State<SliderScreenState> {
 
                   items: imgList
                       .map((item) => Image.asset(
-                            item['image_path'],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                          ))
+                    item['image_path'],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ))
                       .toList(),
                   carouselController: carouselController,
 
@@ -90,7 +90,7 @@ class _SliderScreenStateState extends State<SliderScreenState> {
               Text(
                 "Life is short, make your To-Do list count",
                 style: TextStyle(fontSize: 20,
-                color: Colors.black54),
+                    color: Colors.black54),
               ),
             ],
           ),
